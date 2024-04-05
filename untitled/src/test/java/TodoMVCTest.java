@@ -2,6 +2,8 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import java.io.File;
+import java.util.List;
+
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -49,35 +51,34 @@ public class TodoMVCTest {
         assertTrue(driver.findElements(By.xpath("//*[@id=\"root\"]/main/ul/li/div/label")).isEmpty());
     }
 
+    @Test
+    void deleteItem() throws InterruptedException {
+
+        WebElement reactButton = driver.findElement(By.xpath("/html/body/div/div[1]/div[2]/iron-pages/div[1]/ul/li[1]/a/span[1]"));
+        reactButton.click();
+        WebElement todoInput = driver.findElement(By.id("todo-input"));
+        todoInput.click();
+        todoInput.sendKeys("todo1");
+        todoInput.sendKeys(Keys.ENTER);
+        WebElement todoItems = driver.findElement(By.xpath("//*[@id=\"root\"]/main/ul/li/div/label"));
+        driver.findElement(By.cssSelector("html")).click();
+        driver.findElement(By.cssSelector(".destroy")).click();
+        // We inserted three lines below expecting them to fail, to test the line that passes underneath
+        // actually passes and isn't a false positive
+        // List<WebElement> todos = driver.findElements(By.xpath("//*[@id=\"root\"]/main/ul/li/div/label"));
+        // System.out.println("Size of elements list is " + todos.size() );
+        // assertTrue(todos.size() == 2);
+        assertTrue(driver.findElements(By.xpath("//*[@id=\"root\"]/main/ul/li/div/label")).isEmpty());
+
+    }
+
 
     @AfterAll
     static void closeBrowser() {
         driver.quit();
     }
     public static void main(String[] args) throws Exception {
-/*
-        // Create a new instance of Selenium
-        WebDriverManager.chromedriver().setup();
 
-        // Use WebDriver to open a new instance of Chrome
-        System.setProperty("webdriver.http.factory", "jdk-http-client");
-        WebDriver driver = new ChromeDriver();
-
-        // Instruct the driver to browse to the Makers website
-        driver.get("https://todomvc.com");
-
-        // Take a screenshot of what's currently on the page,
-        // and store it in a file 'makers.png' in your project root
-         takeScreenshot(driver, "todomvc.png");
-
-        // Find the title of the webpage (the value inside the HTML
-        // <title> element) and print it to the terminal
-        System.out.println(driver.getTitle());
-
-        // Close down Selenium and end the test
-        driver.quit();
-
- */
     }
 
     // Helper function for taking screenshots using WebDriver
