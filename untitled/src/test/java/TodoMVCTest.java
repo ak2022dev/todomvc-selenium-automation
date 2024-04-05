@@ -13,13 +13,27 @@ public class TodoMVCTest {
     static void launchBrowser() {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
+        driver.get("https://todomvc.com");
     }
     @Test
     void getTitle() throws InterruptedException {
-        driver.get("https://todomvc.com");
         WebElement title = driver.findElement(By.cssSelector("body > div.container > header > div.col-md-8 > img"));
         String pageTitle = driver.getTitle();
         assertEquals("TodoMVC", driver.getTitle());
+    }
+
+    @Test
+    void addItem() throws InterruptedException {
+
+      WebElement reactButton = driver.findElement(By.xpath("/html/body/div/div[1]/div[2]/iron-pages/div[1]/ul/li[1]/a/span[1]"));
+      reactButton.click();
+      WebElement todoInput = driver.findElement(By.id("todo-input"));
+      todoInput.click();
+      todoInput.sendKeys("todo1");
+      todoInput.sendKeys(Keys.ENTER);
+      WebElement todoItems = driver.findElement(By.xpath("//*[@id=\"root\"]/main/ul/li/div/label"));
+      String todoItemsText = todoItems.getText();
+      assertEquals(todoItemsText,"todo1");
     }
 
 
@@ -43,7 +57,7 @@ public class TodoMVCTest {
 
         // Take a screenshot of what's currently on the page,
         // and store it in a file 'makers.png' in your project root
-        takeScreenshot(driver, "todomvc.png");
+         takeScreenshot(driver, "todomvc.png");
 
         // Find the title of the webpage (the value inside the HTML
         // <title> element) and print it to the terminal
