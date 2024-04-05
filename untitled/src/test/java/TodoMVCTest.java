@@ -15,6 +15,9 @@ public class TodoMVCTest {
         driver = new ChromeDriver();
         driver.get("https://todomvc.com");
     }
+
+    // Your tests will go here!
+
     @Test
     void getTitle() throws InterruptedException {
         WebElement title = driver.findElement(By.cssSelector("body > div.container > header > div.col-md-8 > img"));
@@ -36,8 +39,16 @@ public class TodoMVCTest {
       assertEquals(todoItemsText,"todo1");
     }
 
+    @Test
+    void cannotAddEmptyItem() throws InterruptedException {
+        WebElement reactButton = driver.findElement(By.xpath("/html/body/div/div[1]/div[2]/iron-pages/div[1]/ul/li[1]/a/span[1]"));
+        reactButton.click();
+        WebElement todoInput = driver.findElement(By.id("todo-input"));
+        todoInput.click();
+        todoInput.sendKeys(Keys.ENTER);
+        assertTrue(driver.findElements(By.xpath("//*[@id=\"root\"]/main/ul/li/div/label")).isEmpty());
+    }
 
-    // Your tests will go here!
 
     @AfterAll
     static void closeBrowser() {
